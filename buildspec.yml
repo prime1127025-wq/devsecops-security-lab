@@ -1,0 +1,12 @@
+
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - python3 -m pip install --user semgrep
+      - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /tmp
+  build:
+    commands:
+      - /root/.local/bin/semgrep --config auto --error .
+      - /tmp/trivy fs --exit-code 1 --severity HIGH,CRITICAL .
